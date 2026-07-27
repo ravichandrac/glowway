@@ -1,5 +1,6 @@
 const TOMTOM_BASE = "https://api.tomtom.com";
 const DEFAULT_MAP_CENTER = [52.247, -2.158];
+const ART_MAP_BOUNDS = [[52.18, -2.23], [52.58, -1.84]];
 const FIXED_PLACES = [
   { id: "droitwich", label: "Droitwich", query: "WR9 7DH, UK" },
   { id: "brandwood", label: "Brandwood Road", query: "B14 6BH, UK" },
@@ -14,10 +15,10 @@ const elements = {
 initialise();
 
 function initialise() {
-  state.map = L.map("map", { zoomControl: false, attributionControl: true }).setView(DEFAULT_MAP_CENTER, 10);
+  state.map = L.map("map", { zoomControl: false, attributionControl: false }).setView(DEFAULT_MAP_CENTER, 10);
   L.control.zoom({ position: "topright" }).addTo(state.map);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" }).addTo(state.map);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=11").catch(() => undefined);
+  L.imageOverlay("assets/birmingham-droitwich-art.png", ART_MAP_BOUNDS, { interactive: false }).addTo(state.map);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=13").catch(() => undefined);
   bindEvents();
   if (!isConfigured()) {
     elements.loadingMessage.textContent = "Add your TomTom key once to start using Glowway.";
@@ -144,7 +145,7 @@ function drawPlaceMarkers() {
   clearMapLayers();
   state.places.forEach((place) => addMarker(place, place.label, place.id === state.nearestPlace.id ? "current" : "destination"));
   addMarker(state.currentLocation, "You", "current");
-  state.map.fitBounds(L.latLngBounds([...state.places, state.currentLocation].map((place) => [place.lat, place.lon])), { padding: [55, 55], maxZoom: 10 });
+  state.map.fitBounds(L.latLngBounds([...state.places, state.currentLocation].map((place) => [place.lat, place.lon])), { paddingTopLeft: [35, 90], paddingBottomRight: [35, 250], maxZoom: 10 });
 }
 
 function drawJourney(route, journey) {
@@ -155,7 +156,7 @@ function drawJourney(route, journey) {
   addTrafficLine(points, "fast");
   sections.forEach((section) => { const part = points.slice(section.startPointIndex, section.endPointIndex + 1); if (part.length > 1) addTrafficLine(part, trafficClass(section)); });
   addMarker(journey.origin, "You", "current"); addMarker(journey.destination, journey.destination.label, "destination");
-  state.map.fitBounds(L.latLngBounds(points), { padding: [55, 55], maxZoom: 12 });
+  state.map.fitBounds(L.latLngBounds(points), { paddingTopLeft: [35, 90], paddingBottomRight: [35, 250], maxZoom: 12 });
 }
 
 function addTrafficLine(points, type) { const styles = { fast: { color: "#73efcb", className: "traffic-fast" }, medium: { color: "#ffbd58", className: "traffic-medium" }, slow: { color: "#ff6f7e", className: "traffic-slow" } }; state.routeLayers.push(L.polyline(points, { ...styles[type], weight: 7, opacity: 1, lineCap: "round", lineJoin: "round" }).addTo(state.map)); }
@@ -176,12 +177,19 @@ function updateTripCard(route, journey) {
 function renderQuickDestinationSwitch() {
   const alternatives = state.places.filter((place) => place.id !== state.nearestPlace.id && place.id !== state.selectedDestinationId);
   elements.quickDestinationButtons.replaceChildren(...alternatives.map((place) => {
+    const action = document.createElement("div");
+    action.className = "destination-action";
     const button = document.createElement("button");
     button.className = "quick-destination-button";
     button.type = "button";
-    button.textContent = `Go to ${place.label}`;
+    button.setAttribute("aria-label", `Change destination to ${place.label}`);
+    button.title = `Go to ${place.label}`;
+    button.innerHTML = "↗";
     button.addEventListener("click", () => { state.selectedDestinationId = place.id; loadSelectedRoute(); });
-    return button;
+    const label = document.createElement("span");
+    label.textContent = place.label;
+    action.append(button, label);
+    return action;
   }));
 }
 

@@ -11,7 +11,7 @@
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="icons/icon.svg" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=11" />
+    <link rel="stylesheet" href="styles.css?v=13" />
     <title>Glowway</title>
   </head>
   <body>
@@ -55,10 +55,10 @@
           <span><i class="legend-dot heavy"></i>Heavy</span>
         </div>
         <div id="quick-destination" class="quick-destination">
-          <p>Also heading to…</p>
+          <p>Switch</p>
           <div id="quick-destination-buttons" class="quick-destination-buttons"></div>
         </div>
-        <button id="refresh-button" class="refresh-button">Refresh live traffic</button>
+        <button id="refresh-button" class="refresh-button" aria-label="Refresh live traffic" title="Refresh live traffic">↻<small>Refresh</small></button>
       </section>
     </main>
 
@@ -79,6 +79,6 @@
     </dialog>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="app.js?v=11"></script>
+    <script src="app.js?v=13"></script>
   </body>
 </html>

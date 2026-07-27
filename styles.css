@@ -4,7 +4,7 @@ body { margin: 0; min-height: 100vh; background: #071426; color: #f1f6ff; }
 button, input, select { font: inherit; }
 button { cursor: pointer; }
 .app-shell { position: relative; min-height: 100svh; overflow: hidden; background: radial-gradient(circle at 10% 85%, #135670 0, transparent 32%), radial-gradient(circle at 100% 0, #3a236e 0, transparent 38%), #071426; }
-#map { position: absolute; inset: 0; background: #0b1d35; }
+#map { position: absolute; inset: 0; background: #061426; }
 .leaflet-control-attribution { background: rgba(7, 20, 38, .66) !important; color: #bdcce5 !important; }
 .leaflet-top.leaflet-right { top: 88px; }
 .leaflet-control-attribution a { color: #bdcce5 !important; }
@@ -13,11 +13,13 @@ button { cursor: pointer; }
 .brand { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.07em; }
 .journey-label { margin: 4px 0 0; color: #c4d1e9; font-size: 12px; }
 .icon-button { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,.19); border-radius: 50%; background: rgba(9, 23, 45, .72); color: #f4f8ff; font-size: 19px; backdrop-filter: blur(14px); }
-.loading-card, .trip-card, .destination-panel { position: absolute; z-index: 500; right: 12px; bottom: max(14px, env(safe-area-inset-bottom)); left: 12px; border: 1px solid rgba(255,255,255,.21); border-radius: 26px; background: rgba(7, 19, 42, .78); box-shadow: 0 16px 45px rgba(0,0,0,.31); backdrop-filter: blur(20px); }
+.loading-card, .trip-card, .destination-panel { position: absolute; z-index: 500; right: 12px; bottom: max(14px, env(safe-area-inset-bottom)); left: 12px; overflow: hidden; border: 1px solid rgba(226, 244, 255, .34); border-radius: 26px; background: linear-gradient(135deg, rgba(177, 221, 255, .24), rgba(16, 31, 57, .31) 42%, rgba(101, 238, 210, .15)); box-shadow: 0 18px 48px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .2); backdrop-filter: blur(18px) saturate(145%); }
 .loading-card { display: grid; justify-items: center; gap: 12px; padding: 26px; color: #d5e2fa; text-align: center; }
 .loading-card p { margin: 0; font-size: 14px; }
 .loader { width: 26px; height: 26px; border: 3px solid rgba(255,255,255,.22); border-top-color: #76f0cf; border-radius: 50%; animation: spin .8s linear infinite; }
-.trip-card { padding: 18px; }
+.trip-card { padding: 14px 16px 13px; }
+.trip-card::before { position: absolute; top: -62px; right: -40px; width: 190px; height: 120px; border-radius: 50%; background: rgba(151, 228, 255, .14); content: ""; filter: blur(18px); pointer-events: none; }
+.trip-card > * { position: relative; }
 .destination-panel { padding: 17px; }
 .destination-question { margin: 0 0 12px; color: #dce7f8; font-size: 14px; font-weight: 600; }
 .destination-buttons { display: grid; gap: 10px; }
@@ -28,21 +30,25 @@ button { cursor: pointer; }
 .trip-card__topline { color: #c7d6ef; font-size: 11px; }
 .live-pill { padding: 5px 9px; border-radius: 99px; background: rgba(137, 246, 211, .16); color: #a5f8dc; }
 .live-pill::before { content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 5px 1px 0; border-radius: 50%; background: #82f3ce; box-shadow: 0 0 10px #82f3ce; animation: pulse 1.8s ease-in-out infinite; }
-.eyebrow { margin: 15px 0 4px; color: #c9d8f2; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; }
+.eyebrow { margin: 10px 0 3px; color: #c9d8f2; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; }
 .trip-card__main { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-#journey-time { margin: 0; font-size: 34px; font-weight: 700; letter-spacing: -.07em; }
+#journey-time { margin: 0; font-size: 31px; font-weight: 700; letter-spacing: -.07em; }
 #arrival-time { margin: 0; color: #c4d1e8; font-size: 12px; }
-.traffic-summary { margin-top: 10px; color: #ffc76b; font-size: 13px; }
-.legend { justify-content: flex-start; margin-top: 15px; color: #c8d6ed; font-size: 11px; }
+.traffic-summary { margin-top: 7px; color: #ffc76b; font-size: 12px; }
+.legend { justify-content: flex-start; margin-top: 10px; color: #c8d6ed; font-size: 10px; }
 .legend span { display: inline-flex; align-items: center; gap: 4px; }
 .legend-dot { width: 7px; height: 7px; border-radius: 50%; }
 .free { background: #73efcb; box-shadow: 0 0 8px #73efcb; }.busy { background: #ffbd58; box-shadow: 0 0 8px #ffbd58; }.heavy { background: #ff6f7e; box-shadow: 0 0 8px #ff6f7e; }
-.refresh-button, .save-button { width: 100%; margin-top: 17px; border: 0; border-radius: 15px; background: linear-gradient(90deg, #6ce9ca, #6fb2ff); color: #062035; font-weight: 700; padding: 13px; }
+.save-button { width: 100%; margin-top: 17px; border: 0; border-radius: 15px; background: linear-gradient(90deg, #6ce9ca, #6fb2ff); color: #062035; font-weight: 700; padding: 13px; }
 .refresh-button:disabled { opacity: .6; }
-.quick-destination { margin-top: 16px; }
-.quick-destination p { margin: 0 0 8px; color: #aebfd9; font-size: 12px; }
-.quick-destination-buttons { display: grid; gap: 8px; }
-.quick-destination-button { width: 100%; border: 1px solid rgba(255, 189, 88, .55); border-radius: 13px; background: rgba(255, 189, 88, .12); color: #ffe1a6; font-weight: 700; padding: 11px 13px; text-align: left; }
+.quick-destination { display: flex; align-items: center; gap: 10px; margin-top: 11px; }
+.quick-destination p { margin: 0; color: #aebfd9; font-size: 11px; }
+.quick-destination-buttons { display: flex; align-items: center; gap: 7px; flex: 1; }
+.destination-action { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.destination-action > span { overflow: hidden; color: #ffe1a6; font-size: 12px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.quick-destination-button, .refresh-button { display: grid; flex: 0 0 auto; width: 42px; height: 42px; place-items: center; border: 1px solid rgba(255, 244, 213, .55); border-radius: 50%; background: linear-gradient(145deg, rgba(255, 232, 172, .3), rgba(255, 168, 73, .12)); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .32), 0 8px 18px rgba(0, 0, 0, .13); color: #ffe1a6; font-size: 21px; font-weight: 700; backdrop-filter: blur(12px) saturate(150%); }
+.refresh-button { position: absolute; right: 16px; bottom: 13px; border-color: rgba(190, 255, 239, .62); background: linear-gradient(145deg, rgba(159, 255, 227, .3), rgba(74, 151, 255, .15)); color: #b7ffec; }
+.refresh-button small { font-size: 0; }
 .settings-dialog { width: min(100%, 520px); max-height: 100svh; margin: 0 0 0 auto; border: 0; padding: max(22px, env(safe-area-inset-top)) 22px 25px; color: #f2f6ff; background: #0a1830; }
 .settings-dialog::backdrop { background: rgba(1, 7, 17, .55); backdrop-filter: blur(3px); }
 .settings-header { display: flex; justify-content: space-between; gap: 20px; }.settings-header h1 { margin: 5px 0 0; font-size: 24px; letter-spacing: -.05em; }.settings-intro, .settings-note { color: #b9c9e2; font-size: 13px; line-height: 1.45; }.settings-dialog label { display: grid; gap: 7px; margin-top: 17px; color: #d8e4f8; font-size: 13px; font-weight: 600; }.settings-dialog input, .settings-dialog select { width: 100%; border: 1px solid rgba(255,255,255,.17); border-radius: 12px; background: #102442; color: #f3f7ff; padding: 12px; font-size: 16px; }.settings-dialog input:focus, .settings-dialog select:focus { outline: 2px solid #79e9d0; outline-offset: 2px; }
