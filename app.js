@@ -8,7 +8,7 @@ const FIXED_PLACES = [
 
 const state = { map: null, routeLayers: [], markers: [], settings: loadSettings(), places: [], currentLocation: null, nearestPlace: null, selectedDestinationId: null };
 const elements = {
-  settingsDialog: document.querySelector("#settings-dialog"), settingsForm: document.querySelector("#settings-form"), settingsButton: document.querySelector("#settings-button"), closeSettings: document.querySelector("#close-settings"), loadingCard: document.querySelector("#loading-card"), loadingMessage: document.querySelector("#loading-message"), destinationPanel: document.querySelector("#destination-panel"), originLabel: document.querySelector("#origin-label"), destinationButtons: document.querySelector("#destination-buttons"), tripCard: document.querySelector("#trip-card"), refreshButton: document.querySelector("#refresh-button"), journeyLabel: document.querySelector("#journey-label"), routeName: document.querySelector("#route-name"), journeyTime: document.querySelector("#journey-time"), arrivalTime: document.querySelector("#arrival-time"), trafficStatus: document.querySelector("#traffic-status"), trafficDelay: document.querySelector("#traffic-delay"), updatedAt: document.querySelector("#updated-at"),
+  settingsDialog: document.querySelector("#settings-dialog"), settingsForm: document.querySelector("#settings-form"), settingsButton: document.querySelector("#settings-button"), closeSettings: document.querySelector("#close-settings"), loadingCard: document.querySelector("#loading-card"), loadingMessage: document.querySelector("#loading-message"), destinationPanel: document.querySelector("#destination-panel"), originLabel: document.querySelector("#origin-label"), destinationButtons: document.querySelector("#destination-buttons"), tripCard: document.querySelector("#trip-card"), quickDestinationButtons: document.querySelector("#quick-destination-buttons"), refreshButton: document.querySelector("#refresh-button"), journeyLabel: document.querySelector("#journey-label"), routeName: document.querySelector("#route-name"), journeyTime: document.querySelector("#journey-time"), arrivalTime: document.querySelector("#arrival-time"), trafficStatus: document.querySelector("#traffic-status"), trafficDelay: document.querySelector("#traffic-delay"), updatedAt: document.querySelector("#updated-at"),
 };
 
 initialise();
@@ -17,7 +17,7 @@ function initialise() {
   state.map = L.map("map", { zoomControl: false, attributionControl: true }).setView(DEFAULT_MAP_CENTER, 10);
   L.control.zoom({ position: "topright" }).addTo(state.map);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" }).addTo(state.map);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=10").catch(() => undefined);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=11").catch(() => undefined);
   bindEvents();
   if (!isConfigured()) {
     elements.loadingMessage.textContent = "Add your TomTom key once to start using Glowway.";
@@ -169,7 +169,20 @@ function updateTripCard(route, journey) {
   elements.trafficDelay.textContent = delaySeconds ? `+${formatDuration(delaySeconds)} traffic` : "No meaningful delays";
   elements.trafficStatus.textContent = delaySeconds > 300 ? "Heavy traffic on parts of the route" : delaySeconds > 90 ? "Some traffic on the route" : "Roads are flowing";
   elements.updatedAt.textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+  renderQuickDestinationSwitch();
   elements.destinationPanel.classList.add("hidden"); elements.tripCard.classList.remove("hidden"); setLoading(false);
+}
+
+function renderQuickDestinationSwitch() {
+  const alternatives = state.places.filter((place) => place.id !== state.nearestPlace.id && place.id !== state.selectedDestinationId);
+  elements.quickDestinationButtons.replaceChildren(...alternatives.map((place) => {
+    const button = document.createElement("button");
+    button.className = "quick-destination-button";
+    button.type = "button";
+    button.textContent = `Go to ${place.label}`;
+    button.addEventListener("click", () => { state.selectedDestinationId = place.id; loadSelectedRoute(); });
+    return button;
+  }));
 }
 
 function setLoading(isLoading, message = "") { elements.loadingCard.classList.toggle("hidden", !isLoading); if (isLoading) { elements.destinationPanel.classList.add("hidden"); elements.tripCard.classList.add("hidden"); } if (message) elements.loadingMessage.textContent = message; elements.refreshButton.disabled = isLoading; }

@@ -39,6 +39,10 @@ button { cursor: pointer; }
 .free { background: #73efcb; box-shadow: 0 0 8px #73efcb; }.busy { background: #ffbd58; box-shadow: 0 0 8px #ffbd58; }.heavy { background: #ff6f7e; box-shadow: 0 0 8px #ff6f7e; }
 .refresh-button, .save-button { width: 100%; margin-top: 17px; border: 0; border-radius: 15px; background: linear-gradient(90deg, #6ce9ca, #6fb2ff); color: #062035; font-weight: 700; padding: 13px; }
 .refresh-button:disabled { opacity: .6; }
+.quick-destination { margin-top: 16px; }
+.quick-destination p { margin: 0 0 8px; color: #aebfd9; font-size: 12px; }
+.quick-destination-buttons { display: grid; gap: 8px; }
+.quick-destination-button { width: 100%; border: 1px solid rgba(255, 189, 88, .55); border-radius: 13px; background: rgba(255, 189, 88, .12); color: #ffe1a6; font-weight: 700; padding: 11px 13px; text-align: left; }
 .settings-dialog { width: min(100%, 520px); max-height: 100svh; margin: 0 0 0 auto; border: 0; padding: max(22px, env(safe-area-inset-top)) 22px 25px; color: #f2f6ff; background: #0a1830; }
 .settings-dialog::backdrop { background: rgba(1, 7, 17, .55); backdrop-filter: blur(3px); }
 .settings-header { display: flex; justify-content: space-between; gap: 20px; }.settings-header h1 { margin: 5px 0 0; font-size: 24px; letter-spacing: -.05em; }.settings-intro, .settings-note { color: #b9c9e2; font-size: 13px; line-height: 1.45; }.settings-dialog label { display: grid; gap: 7px; margin-top: 17px; color: #d8e4f8; font-size: 13px; font-weight: 600; }.settings-dialog input, .settings-dialog select { width: 100%; border: 1px solid rgba(255,255,255,.17); border-radius: 12px; background: #102442; color: #f3f7ff; padding: 12px; font-size: 16px; }.settings-dialog input:focus, .settings-dialog select:focus { outline: 2px solid #79e9d0; outline-offset: 2px; }
