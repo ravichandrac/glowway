@@ -16,7 +16,7 @@ initialise();
 function initialise() {
   state.map = L.map("map", { zoomControl: false, attributionControl: false }).setView(DEFAULT_MAP_CENTER, 10);
   L.control.zoom({ position: "topright" }).addTo(state.map);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=20").catch(() => undefined);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=21").catch(() => undefined);
   bindEvents();
   if (!isConfigured()) {
     elements.loadingMessage.textContent = "Add your TomTom key once to start using Glowway.";
@@ -160,7 +160,10 @@ function drawJourney(route, journey) {
 
 function addTrafficLine(points, type) { const styles = { fast: { color: "#70ffd7", className: "traffic-fast" }, medium: { color: "#ffd071", className: "traffic-medium" }, slow: { color: "#ff7890", className: "traffic-slow" } }; state.routeLayers.push(L.polyline(points, { ...styles[type], weight: 6, opacity: 1, lineCap: "round", lineJoin: "round" }).addTo(state.map)); }
 function trafficClass(section) { const speed = section.effectiveSpeedInKmh ?? 70; if (speed < 20 || section.delayInSeconds > 300) return "slow"; if (speed < 45 || section.delayInSeconds > 90) return "medium"; return "fast"; }
-function addMarker(place, label, type) { state.markers.push(L.circleMarker([place.lat, place.lon], { radius: type === "current" ? 9 : 8, color: "#ffffff", weight: 3, fillColor: type === "current" ? "#51c9ff" : "#ffbd58", fillOpacity: 1 }).bindTooltip(label, { permanent: true, direction: "top", offset: [0, -11], className: "place-label" }).addTo(state.map)); }
+function addMarker(place, label, type) {
+  const isStart = type === "current";
+  state.markers.push(L.circleMarker([place.lat, place.lon], { radius: isStart ? 9 : 8, color: "#ffffff", weight: 3, fillColor: isStart ? "#51c9ff" : "#ffbd58", fillOpacity: 1 }).bindTooltip(label, { permanent: true, direction: isStart ? "bottom" : "top", offset: [0, isStart ? 11 : -11], className: "place-label" }).addTo(state.map));
+}
 function clearMapLayers() { [...state.routeLayers, ...state.markers].forEach((layer) => state.map.removeLayer(layer)); state.routeLayers = []; state.markers = []; }
 function focusRoute(points) { state.map.fitBounds(L.latLngBounds(points), { paddingTopLeft: [72, 125], paddingBottomRight: [72, 255], maxZoom: 14 }); }
 
