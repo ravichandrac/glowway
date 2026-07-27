@@ -17,7 +17,7 @@ function initialise() {
   state.map = L.map("map", { zoomControl: false, attributionControl: true }).setView(DEFAULT_MAP_CENTER, 10);
   L.control.zoom({ position: "topright" }).addTo(state.map);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" }).addTo(state.map);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=9").catch(() => undefined);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=10").catch(() => undefined);
   bindEvents();
   if (!isConfigured()) {
     elements.loadingMessage.textContent = "Add your TomTom key once to start using Glowway.";
@@ -124,7 +124,10 @@ async function getRoute(origin, destination) {
   const url = new URL(`${TOMTOM_BASE}/routing/1/calculateRoute/${origin.lat},${origin.lon}:${destination.lat},${destination.lon}/json`);
   url.searchParams.set("key", state.settings.apiKey); url.searchParams.set("traffic", "true"); url.searchParams.set("travelMode", "car"); url.searchParams.set("routeType", "fastest"); url.searchParams.set("sectionType", "traffic"); url.searchParams.set("computeTravelTimeFor", "all");
   const response = await fetch(url);
-  if (!response.ok) throw new Error("TomTom could not load live traffic. In TomTom, edit this key and enable both Routing API and Traffic API, then try again.");
+  if (!response.ok) {
+    const details = (await response.text()).replace(/\s+/g, " ").slice(0, 180);
+    throw new Error(`TomTom route request failed (HTTP ${response.status}). ${details || "Please try again."}`);
+  }
   const route = (await response.json()).routes?.[0];
   if (!route) throw new Error("No driving route was found for those locations.");
   return route;
