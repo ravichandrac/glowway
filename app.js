@@ -118,11 +118,11 @@ async function refreshJourney() {
 }
 
 async function geocode(query, locationName) {
-  const url = new URL(`${TOMTOM_BASE}/search/2/geocode/${encodeURIComponent(query)}.json`);
-  url.searchParams.set("key", state.settings.apiKey);
-  url.searchParams.set("limit", "1");
-  url.searchParams.set("countrySet", "GB");
-  const response = await fetch(url);
+  const url = new URL(`${TOMTOM_BASE}/maps/orbis/places/geocode`);
+  url.searchParams.set("query", query);
+  url.searchParams.set("maxResults", "1");
+  url.searchParams.set("countryCodesIso2", "GB");
+  const response = await fetch(url, { headers: tomtomHeaders("results(title,position)") });
   if (response.status === 401 || response.status === 403) {
     throw new Error("TomTom rejected this key. In TomTom, edit the key and make sure both Geocoding API and Routing API are enabled.");
   }
@@ -130,7 +130,7 @@ async function geocode(query, locationName) {
   const data = await response.json();
   const result = data.results?.[0];
   if (!result) throw new Error(`TomTom could not find ${locationName}. Open Settings and enter its full address or exact postcode.`);
-  return { label: result.address.freeformAddress || query, lat: result.position.lat, lon: result.position.lon };
+  return { label: result.title || query, lat: result.position.coordinates[1], lon: result.position.coordinates[0] };
 }
 
 function getCurrentLocation() {
@@ -164,19 +164,29 @@ function chooseJourney(current, places) {
 
 async function getRoute(origin, destination) {
   const coordinates = `${origin.lat},${origin.lon}:${destination.lat},${destination.lon}`;
-  const url = new URL(`${TOMTOM_BASE}/routing/1/calculateRoute/${coordinates}/json`);
+  const url = new URL(`${TOMTOM_BASE}/maps/orbis/routing/calculateRoute/${coordinates}/json`);
   url.searchParams.set("key", state.settings.apiKey);
+  url.searchParams.set("apiVersion", "2");
   url.searchParams.set("traffic", "live");
   url.searchParams.set("travelMode", "car");
   url.searchParams.set("routeType", "fastest");
   url.searchParams.set("computeTravelTimeFor", "all");
   url.searchParams.set("sectionType", "traffic");
-  const response = await fetch(url);
+  const response = await fetch(url, { headers: tomtomHeaders() });
   if (!response.ok) throw new Error("TomTom could not load live traffic. Check that your API key is valid and try again.");
   const data = await response.json();
   const route = data.routes?.[0];
   if (!route) throw new Error("No driving route was found for those locations.");
   return route;
+}
+
+function tomtomHeaders(attributes) {
+  const headers = { "TomTom-Api-Version": "2" };
+  if (attributes) {
+    headers["TomTom-Api-Key"] = state.settings.apiKey;
+    headers.Attributes = attributes;
+  }
+  return headers;
 }
 
 function drawJourney(route, journey, currentLocation) {
