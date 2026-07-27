@@ -16,7 +16,7 @@ initialise();
 function initialise() {
   state.map = L.map("map", { zoomControl: false, attributionControl: false }).setView(DEFAULT_MAP_CENTER, 10);
   L.control.zoom({ position: "topright" }).addTo(state.map);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=19").catch(() => undefined);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=20").catch(() => undefined);
   bindEvents();
   if (!isConfigured()) {
     elements.loadingMessage.textContent = "Add your TomTom key once to start using Glowway.";
@@ -87,7 +87,7 @@ async function loadSelectedRoute() {
   try {
     state.currentLocation = await getCurrentLocation();
     state.nearestPlace = nearestPlace(state.currentLocation, state.places);
-    const journey = { origin: state.currentLocation, destination, routeLabel: `${state.nearestPlace.label} → ${destination.label}` };
+    const journey = { origin: state.currentLocation, originLabel: state.nearestPlace.label, destination, routeLabel: `${state.nearestPlace.label} → ${destination.label}` };
     const route = await getRoute(journey.origin, journey.destination);
     drawJourney(route, journey);
     updateTripCard(route, journey);
@@ -143,7 +143,7 @@ function drawPlaceMarkers() {
   clearMapLayers();
   state.places.forEach((place) => addMarker(place, place.label, place.id === state.nearestPlace.id ? "current" : "destination"));
   addMarker(state.currentLocation, "You", "current");
-  state.map.fitBounds(L.latLngBounds([...state.places, state.currentLocation].map((place) => [place.lat, place.lon])), { paddingTopLeft: [28, 125], paddingBottomRight: [125, 255], maxZoom: 10 });
+  state.map.fitBounds(L.latLngBounds([...state.places, state.currentLocation].map((place) => [place.lat, place.lon])), { paddingTopLeft: [72, 125], paddingBottomRight: [72, 255], maxZoom: 10 });
 }
 
 function drawJourney(route, journey) {
@@ -154,15 +154,15 @@ function drawJourney(route, journey) {
   state.routeLayers.push(L.polyline(points, { color: "#d9efff", weight: 9, opacity: .32, className: "route-glass-sheen", lineCap: "round", lineJoin: "round" }).addTo(state.map));
   addTrafficLine(points, "fast");
   sections.forEach((section) => { const part = points.slice(section.startPointIndex, section.endPointIndex + 1); if (part.length > 1) addTrafficLine(part, trafficClass(section)); });
-  addMarker(journey.origin, "You", "current"); addMarker(journey.destination, journey.destination.label, "destination");
+  addMarker(journey.origin, journey.originLabel, "current"); addMarker(journey.destination, journey.destination.label, "destination");
   focusRoute(points);
 }
 
 function addTrafficLine(points, type) { const styles = { fast: { color: "#70ffd7", className: "traffic-fast" }, medium: { color: "#ffd071", className: "traffic-medium" }, slow: { color: "#ff7890", className: "traffic-slow" } }; state.routeLayers.push(L.polyline(points, { ...styles[type], weight: 6, opacity: 1, lineCap: "round", lineJoin: "round" }).addTo(state.map)); }
 function trafficClass(section) { const speed = section.effectiveSpeedInKmh ?? 70; if (speed < 20 || section.delayInSeconds > 300) return "slow"; if (speed < 45 || section.delayInSeconds > 90) return "medium"; return "fast"; }
-function addMarker(place, label, type) { state.markers.push(L.circleMarker([place.lat, place.lon], { radius: type === "current" ? 9 : 8, color: "#ffffff", weight: 3, fillColor: type === "current" ? "#51c9ff" : "#ffbd58", fillOpacity: 1 }).bindTooltip(label, { direction: "top", offset: [0, -7] }).addTo(state.map)); }
+function addMarker(place, label, type) { state.markers.push(L.circleMarker([place.lat, place.lon], { radius: type === "current" ? 9 : 8, color: "#ffffff", weight: 3, fillColor: type === "current" ? "#51c9ff" : "#ffbd58", fillOpacity: 1 }).bindTooltip(label, { permanent: true, direction: "top", offset: [0, -11], className: "place-label" }).addTo(state.map)); }
 function clearMapLayers() { [...state.routeLayers, ...state.markers].forEach((layer) => state.map.removeLayer(layer)); state.routeLayers = []; state.markers = []; }
-function focusRoute(points) { state.map.fitBounds(L.latLngBounds(points), { paddingTopLeft: [28, 125], paddingBottomRight: [125, 255], maxZoom: 14 }); }
+function focusRoute(points) { state.map.fitBounds(L.latLngBounds(points), { paddingTopLeft: [72, 125], paddingBottomRight: [72, 255], maxZoom: 14 }); }
 
 function updateTripCard(route, journey) {
   const summary = route.summary; const travelSeconds = summary.travelTimeInSeconds; const delaySeconds = summary.trafficDelayInSeconds || 0; const arrival = new Date(Date.now() + travelSeconds * 1000);

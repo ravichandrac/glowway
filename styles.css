@@ -12,6 +12,8 @@ button { cursor: pointer; }
 .leaflet-right .leaflet-control { margin-right: 0; }
 .leaflet-control-zoom { overflow: hidden; border: 1px solid rgba(214, 243, 255, .36) !important; border-radius: 20px !important; background: linear-gradient(145deg, rgba(191, 231, 255, .3), rgba(8, 26, 54, .44)) !important; box-shadow: 0 12px 28px rgba(0, 0, 0, .23), inset 0 1px 0 rgba(255, 255, 255, .27); backdrop-filter: blur(16px) saturate(150%); }
 .leaflet-control-zoom a { width: 42px !important; height: 42px !important; border-color: rgba(214, 243, 255, .2) !important; background: transparent !important; color: #eaf7ff !important; font-weight: 600; line-height: 40px !important; }
+.place-label { border: 1px solid rgba(221, 247, 255, .4) !important; border-radius: 10px !important; background: rgba(7, 25, 49, .56) !important; box-shadow: 0 6px 16px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .18); color: #eef8ff !important; font-size: 12px; font-weight: 700; padding: 5px 8px !important; backdrop-filter: blur(10px); }
+.place-label::before { display: none; }
 .leaflet-control-attribution a { color: #bdcce5 !important; }
 .app-header { position: relative; z-index: 500; display: flex; align-items: flex-start; justify-content: space-between; padding: max(42px, calc(env(safe-area-inset-top) + 14px)) 20px 0; pointer-events: none; }
 .app-header > * { pointer-events: auto; }
