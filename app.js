@@ -1,6 +1,5 @@
 const TOMTOM_BASE = "https://api.tomtom.com";
 const DEFAULT_MAP_CENTER = [52.247, -2.158];
-const COMMUTE_VIEW_BOUNDS = [[52.2, -2.25], [52.57, -1.72]];
 const FIXED_PLACES = [
   { id: "droitwich", label: "Droitwich", query: "WR9 7DH, UK" },
   { id: "brandwood", label: "Brandwood Road", query: "B14 6BH, UK" },
@@ -17,7 +16,7 @@ initialise();
 function initialise() {
   state.map = L.map("map", { zoomControl: false, attributionControl: false }).setView(DEFAULT_MAP_CENTER, 10);
   L.control.zoom({ position: "topright" }).addTo(state.map);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=16").catch(() => undefined);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=17").catch(() => undefined);
   bindEvents();
   if (!isConfigured()) {
     elements.loadingMessage.textContent = "Add your TomTom key once to start using Glowway.";
@@ -144,7 +143,7 @@ function drawPlaceMarkers() {
   clearMapLayers();
   state.places.forEach((place) => addMarker(place, place.label, place.id === state.nearestPlace.id ? "current" : "destination"));
   addMarker(state.currentLocation, "You", "current");
-  focusCommuteArea();
+  state.map.fitBounds(L.latLngBounds([...state.places, state.currentLocation].map((place) => [place.lat, place.lon])), { paddingTopLeft: [28, 125], paddingBottomRight: [125, 255], maxZoom: 10 });
 }
 
 function drawJourney(route, journey) {
@@ -156,14 +155,14 @@ function drawJourney(route, journey) {
   addTrafficLine(points, "fast");
   sections.forEach((section) => { const part = points.slice(section.startPointIndex, section.endPointIndex + 1); if (part.length > 1) addTrafficLine(part, trafficClass(section)); });
   addMarker(journey.origin, "You", "current"); addMarker(journey.destination, journey.destination.label, "destination");
-  focusCommuteArea();
+  focusRoute(points);
 }
 
 function addTrafficLine(points, type) { const styles = { fast: { color: "#70ffd7", className: "traffic-fast" }, medium: { color: "#ffd071", className: "traffic-medium" }, slow: { color: "#ff7890", className: "traffic-slow" } }; state.routeLayers.push(L.polyline(points, { ...styles[type], weight: 6, opacity: 1, lineCap: "round", lineJoin: "round" }).addTo(state.map)); }
 function trafficClass(section) { const speed = section.effectiveSpeedInKmh ?? 70; if (speed < 20 || section.delayInSeconds > 300) return "slow"; if (speed < 45 || section.delayInSeconds > 90) return "medium"; return "fast"; }
 function addMarker(place, label, type) { state.markers.push(L.circleMarker([place.lat, place.lon], { radius: type === "current" ? 9 : 8, color: "#ffffff", weight: 3, fillColor: type === "current" ? "#51c9ff" : "#ffbd58", fillOpacity: 1 }).bindTooltip(label, { direction: "top", offset: [0, -7] }).addTo(state.map)); }
 function clearMapLayers() { [...state.routeLayers, ...state.markers].forEach((layer) => state.map.removeLayer(layer)); state.routeLayers = []; state.markers = []; }
-function focusCommuteArea() { state.map.fitBounds(COMMUTE_VIEW_BOUNDS, { paddingTopLeft: [28, 125], paddingBottomRight: [125, 255], maxZoom: 10 }); }
+function focusRoute(points) { state.map.fitBounds(L.latLngBounds(points), { paddingTopLeft: [28, 125], paddingBottomRight: [125, 255], maxZoom: 14 }); }
 
 function updateTripCard(route, journey) {
   const summary = route.summary; const travelSeconds = summary.travelTimeInSeconds; const delaySeconds = summary.trafficDelayInSeconds || 0; const arrival = new Date(Date.now() + travelSeconds * 1000);
