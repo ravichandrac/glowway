@@ -1,0 +1,10 @@
+{
+  "name": "Glowway",
+  "short_name": "Glowway",
+  "description": "Personal live traffic companion",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#071426",
+  "theme_color": "#071426",
+  "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

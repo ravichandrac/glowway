@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#071426" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Glowway" />
+    <meta name="description" content="A personal live traffic companion for your regular journey." />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icons/icon.svg" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Glowway</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <div id="map" aria-label="Live traffic map"></div>
+      <header class="app-header">
+        <div>
+          <p class="brand">glowway</p>
+          <p id="journey-label" class="journey-label">Your personal traffic view</p>
+        </div>
+        <button id="settings-button" class="icon-button" aria-label="Open settings">⚙</button>
+      </header>
+
+      <section id="loading-card" class="loading-card" aria-live="polite">
+        <div class="loader"></div>
+        <p id="loading-message">Getting your live location…</p>
+      </section>
+
+      <section id="trip-card" class="trip-card hidden" aria-live="polite">
+        <div class="trip-card__topline">
+          <span id="live-pill" class="live-pill">Live</span>
+          <span id="updated-at">—</span>
+        </div>
+        <p id="route-name" class="eyebrow">Your journey</p>
+        <div class="trip-card__main">
+          <p id="journey-time">—</p>
+          <p id="arrival-time">—</p>
+        </div>
+        <div class="traffic-summary">
+          <span id="traffic-status">Checking roads…</span>
+          <span id="traffic-delay">—</span>
+        </div>
+        <div class="legend" aria-label="Route traffic legend">
+          <span><i class="legend-dot free"></i>Flowing</span>
+          <span><i class="legend-dot busy"></i>Busy</span>
+          <span><i class="legend-dot heavy"></i>Heavy</span>
+        </div>
+        <button id="refresh-button" class="refresh-button">Refresh live traffic</button>
+      </section>
+    </main>
+
+    <dialog id="settings-dialog" class="settings-dialog">
+      <form id="settings-form" method="dialog">
+        <div class="settings-header">
+          <div>
+            <p class="brand">glowway</p>
+            <h1>Set up your journeys</h1>
+          </div>
+          <button type="button" id="close-settings" class="icon-button" aria-label="Close settings">×</button>
+        </div>
+        <p class="settings-intro">Your TomTom key and locations stay in this browser on your phone.</p>
+        <label>TomTom API key<input id="api-key" name="apiKey" type="password" autocomplete="off" placeholder="Paste your free TomTom key" required /></label>
+        <label>Home in Droitwich<input id="home-location" name="homeLocation" autocomplete="street-address" placeholder="Your Droitwich postcode" required /></label>
+        <label>Destination 1 — Banwood Road<input id="destination-one" name="destinationOne" autocomplete="street-address" placeholder="Exact address or postcode" required /></label>
+        <label>Destination 2 — Kenyon Street<input id="destination-two" name="destinationTwo" autocomplete="street-address" placeholder="Exact address or postcode" required /></label>
+        <label>Default destination<select id="default-destination" name="defaultDestination"><option value="one">Banwood Road</option><option value="two">Kenyon Street</option></select></label>
+        <p class="settings-note">When you are nearer Droitwich, Glowway sends you to your chosen destination. When you are nearer either destination, it sends you home.</p>
+        <button class="save-button" type="submit">Save and show live traffic</button>
+      </form>
+    </dialog>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
