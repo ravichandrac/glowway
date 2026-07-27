@@ -4,7 +4,7 @@ body { margin: 0; min-height: 100vh; background: #071426; color: #f1f6ff; }
 button, input, select { font: inherit; }
 button { cursor: pointer; }
 .app-shell { position: relative; min-height: 100svh; overflow: hidden; background: radial-gradient(circle at 10% 85%, #135670 0, transparent 32%), radial-gradient(circle at 100% 0, #3a236e 0, transparent 38%), #071426; }
-#map { position: absolute; inset: 0; background: #061426; }
+#map { position: absolute; inset: 0; background: #061426 url("assets/birmingham-droitwich-art.png") center / cover no-repeat; }
 .leaflet-control-attribution { background: rgba(7, 20, 38, .66) !important; color: #bdcce5 !important; }
 .leaflet-top.leaflet-right { top: 88px; }
 .leaflet-control-attribution a { color: #bdcce5 !important; }
@@ -52,6 +52,6 @@ button { cursor: pointer; }
 .settings-dialog { width: min(100%, 520px); max-height: 100svh; margin: 0 0 0 auto; border: 0; padding: max(22px, env(safe-area-inset-top)) 22px 25px; color: #f2f6ff; background: #0a1830; }
 .settings-dialog::backdrop { background: rgba(1, 7, 17, .55); backdrop-filter: blur(3px); }
 .settings-header { display: flex; justify-content: space-between; gap: 20px; }.settings-header h1 { margin: 5px 0 0; font-size: 24px; letter-spacing: -.05em; }.settings-intro, .settings-note { color: #b9c9e2; font-size: 13px; line-height: 1.45; }.settings-dialog label { display: grid; gap: 7px; margin-top: 17px; color: #d8e4f8; font-size: 13px; font-weight: 600; }.settings-dialog input, .settings-dialog select { width: 100%; border: 1px solid rgba(255,255,255,.17); border-radius: 12px; background: #102442; color: #f3f7ff; padding: 12px; font-size: 16px; }.settings-dialog input:focus, .settings-dialog select:focus { outline: 2px solid #79e9d0; outline-offset: 2px; }
-.traffic-fast { stroke-dasharray: 7 17; animation: traffic-flow 1.35s linear infinite; }.traffic-medium { stroke-dasharray: 7 21; animation: traffic-flow 3.1s linear infinite; }.traffic-slow { stroke-dasharray: 8 15; animation: traffic-flow 6.4s linear infinite; }
+.traffic-fast { stroke-dasharray: 8 18; animation: traffic-flow 2.2s linear infinite; filter: drop-shadow(0 0 4px rgba(103, 240, 207, .6)); }.traffic-medium { stroke-dasharray: 8 22; animation: traffic-flow 4.5s linear infinite; filter: drop-shadow(0 0 4px rgba(255, 195, 107, .55)); }.traffic-slow { stroke-dasharray: 8 17; animation: traffic-flow 7.8s linear infinite; filter: drop-shadow(0 0 4px rgba(255, 115, 136, .55)); }
 @keyframes traffic-flow { to { stroke-dashoffset: -180px; } } @keyframes spin { to { transform: rotate(360deg); } } @keyframes pulse { 50% { opacity: .35; transform: scale(.65); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
