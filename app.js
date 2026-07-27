@@ -1,6 +1,5 @@
 const TOMTOM_BASE = "https://api.tomtom.com";
 const DEFAULT_MAP_CENTER = [52.247, -2.158];
-const ART_MAP_BOUNDS = [[52.02, -2.39], [52.74, -1.68]];
 const FIXED_PLACES = [
   { id: "droitwich", label: "Droitwich", query: "WR9 7DH, UK" },
   { id: "brandwood", label: "Brandwood Road", query: "B14 6BH, UK" },
@@ -17,8 +16,7 @@ initialise();
 function initialise() {
   state.map = L.map("map", { zoomControl: false, attributionControl: false }).setView(DEFAULT_MAP_CENTER, 10);
   L.control.zoom({ position: "topright" }).addTo(state.map);
-  L.imageOverlay("assets/birmingham-droitwich-art.png", ART_MAP_BOUNDS, { interactive: false }).addTo(state.map);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=14").catch(() => undefined);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=15").catch(() => undefined);
   bindEvents();
   if (!isConfigured()) {
     elements.loadingMessage.textContent = "Add your TomTom key once to start using Glowway.";
@@ -152,15 +150,15 @@ function drawJourney(route, journey) {
   clearMapLayers();
   const points = route.legs.flatMap((leg) => leg.points).map((point) => [point.latitude, point.longitude]);
   const sections = route.sections?.filter((section) => section.sectionType === "TRAFFIC") || [];
-  state.routeLayers.push(L.polyline(points, { color: "#162d49", weight: 15, opacity: .88, lineCap: "round", lineJoin: "round" }).addTo(state.map));
-  state.routeLayers.push(L.polyline(points, { color: "#58759d", weight: 9, opacity: .9, lineCap: "round", lineJoin: "round" }).addTo(state.map));
+  state.routeLayers.push(L.polyline(points, { color: "#b8dfff", weight: 16, opacity: .2, className: "route-glass-base", lineCap: "round", lineJoin: "round" }).addTo(state.map));
+  state.routeLayers.push(L.polyline(points, { color: "#d9efff", weight: 9, opacity: .32, className: "route-glass-sheen", lineCap: "round", lineJoin: "round" }).addTo(state.map));
   addTrafficLine(points, "fast");
   sections.forEach((section) => { const part = points.slice(section.startPointIndex, section.endPointIndex + 1); if (part.length > 1) addTrafficLine(part, trafficClass(section)); });
   addMarker(journey.origin, "You", "current"); addMarker(journey.destination, journey.destination.label, "destination");
   state.map.fitBounds(L.latLngBounds(points), { paddingTopLeft: [35, 90], paddingBottomRight: [35, 250], maxZoom: 12 });
 }
 
-function addTrafficLine(points, type) { const styles = { fast: { color: "#67f0cf", className: "traffic-fast" }, medium: { color: "#ffc36b", className: "traffic-medium" }, slow: { color: "#ff7388", className: "traffic-slow" } }; state.routeLayers.push(L.polyline(points, { ...styles[type], weight: 6, opacity: 1, lineCap: "round", lineJoin: "round" }).addTo(state.map)); }
+function addTrafficLine(points, type) { const styles = { fast: { color: "#70ffd7", className: "traffic-fast" }, medium: { color: "#ffd071", className: "traffic-medium" }, slow: { color: "#ff7890", className: "traffic-slow" } }; state.routeLayers.push(L.polyline(points, { ...styles[type], weight: 6, opacity: 1, lineCap: "round", lineJoin: "round" }).addTo(state.map)); }
 function trafficClass(section) { const speed = section.effectiveSpeedInKmh ?? 70; if (speed < 20 || section.delayInSeconds > 300) return "slow"; if (speed < 45 || section.delayInSeconds > 90) return "medium"; return "fast"; }
 function addMarker(place, label, type) { state.markers.push(L.circleMarker([place.lat, place.lon], { radius: type === "current" ? 9 : 8, color: "#ffffff", weight: 3, fillColor: type === "current" ? "#51c9ff" : "#ffbd58", fillOpacity: 1 }).bindTooltip(label, { direction: "top", offset: [0, -7] }).addTo(state.map)); }
 function clearMapLayers() { [...state.routeLayers, ...state.markers].forEach((layer) => state.map.removeLayer(layer)); state.routeLayers = []; state.markers = []; }
