@@ -6,6 +6,7 @@ button { cursor: pointer; }
 .app-shell { position: relative; min-height: 100svh; overflow: hidden; background: radial-gradient(circle at 10% 85%, #135670 0, transparent 32%), radial-gradient(circle at 100% 0, #3a236e 0, transparent 38%), #071426; }
 #map { position: absolute; inset: 0; background: #0b1d35; }
 .leaflet-control-attribution { background: rgba(7, 20, 38, .66) !important; color: #bdcce5 !important; }
+.leaflet-top.leaflet-right { top: 88px; }
 .leaflet-control-attribution a { color: #bdcce5 !important; }
 .app-header { position: relative; z-index: 500; display: flex; align-items: flex-start; justify-content: space-between; padding: max(22px, env(safe-area-inset-top)) 20px 0; pointer-events: none; }
 .app-header > * { pointer-events: auto; }

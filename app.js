@@ -99,9 +99,9 @@ async function refreshJourney() {
   setLoading(true, "Finding your location and checking the roads…");
   try {
     const [home, destinationOne, destinationTwo, currentLocation] = await Promise.all([
-      geocode(state.settings.homeLocation),
-      geocode(state.settings.destinationOne),
-      geocode(state.settings.destinationTwo),
+      geocode(state.settings.homeLocation, "your Droitwich home location"),
+      geocode(state.settings.destinationOne, "your Banwood Road destination"),
+      geocode(state.settings.destinationTwo, "your Kenyon Street destination"),
       getCurrentLocation(),
     ]);
     state.resolvedPlaces = { home, destinationOne, destinationTwo };
@@ -117,16 +117,19 @@ async function refreshJourney() {
   }
 }
 
-async function geocode(query) {
+async function geocode(query, locationName) {
   const url = new URL(`${TOMTOM_BASE}/search/2/geocode/${encodeURIComponent(query)}.json`);
   url.searchParams.set("key", state.settings.apiKey);
   url.searchParams.set("limit", "1");
   url.searchParams.set("countrySet", "GB");
   const response = await fetch(url);
-  if (!response.ok) throw new Error("TomTom could not find that address. Please check the postcode in Settings.");
+  if (response.status === 401 || response.status === 403) {
+    throw new Error("TomTom rejected this key. In TomTom, edit the key and make sure both Geocoding API and Routing API are enabled.");
+  }
+  if (!response.ok) throw new Error(`TomTom could not check ${locationName}. Please try again in a moment.`);
   const data = await response.json();
   const result = data.results?.[0];
-  if (!result) throw new Error(`TomTom could not find “${query}”. Please check it in Settings.`);
+  if (!result) throw new Error(`TomTom could not find ${locationName}. Open Settings and enter its full address or exact postcode.`);
   return { label: result.address.freeformAddress || query, lat: result.position.lat, lon: result.position.lon };
 }
 
