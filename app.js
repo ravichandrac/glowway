@@ -15,8 +15,7 @@ initialise();
 
 function initialise() {
   state.map = L.map("map", { zoomControl: false, attributionControl: false }).setView(DEFAULT_MAP_CENTER, 10);
-  L.control.zoom({ position: "topright" }).addTo(state.map);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=21").catch(() => undefined);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=23").catch(() => undefined);
   bindEvents();
   if (!isConfigured()) {
     elements.loadingMessage.textContent = "Add your TomTom key once to start using Glowway.";
@@ -114,7 +113,7 @@ function getCurrentLocation() {
 }
 
 function locationError(error) {
-  if (error.code === 1) return new Error("Location was denied. In Safari, open the page menu beside the address bar, choose Website Settings, then set Location to Allow.");
+  if (error.code === 1) return new Error("Glowway needs location access. In iPhone Settings, open Privacy & Security, then Location Services, and allow Glowway while using the app. If Glowway is not listed, allow Location for this site once in Safari, then reopen Glowway.");
   if (error.code === 2) return new Error("Your iPhone could not find its location. Check that Location Services and Precise Location are on, then try again outside or near a window.");
   return new Error("Your iPhone is taking longer than expected to find its location. Please wait a moment, then reload Glowway.");
 }
