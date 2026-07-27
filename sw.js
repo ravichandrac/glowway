@@ -1,5 +1,5 @@
-const CACHE_NAME = "glowway-v7";
-const CORE_ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.json"];
+const CACHE_NAME = "glowway-v8";
+const CORE_ASSETS = ["./", "./index.html", "./styles.css?v=8", "./app.js?v=8", "./manifest.json"];
 self.addEventListener("install", (event) => event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS))));
 self.addEventListener("activate", (event) => {
   event.waitUntil(

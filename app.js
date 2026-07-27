@@ -17,7 +17,7 @@ function initialise() {
   state.map = L.map("map", { zoomControl: false, attributionControl: true }).setView(DEFAULT_MAP_CENTER, 10);
   L.control.zoom({ position: "topright" }).addTo(state.map);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" }).addTo(state.map);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => undefined);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js?v=8").catch(() => undefined);
   bindEvents();
   if (!isConfigured()) {
     elements.loadingMessage.textContent = "Add your TomTom key once to start using Glowway.";
@@ -130,7 +130,11 @@ async function getRoute(origin, destination) {
   return route;
 }
 
-function tomtomHeaders(attributes) { const headers = { "TomTom-Api-Version": "2" }; if (attributes) { headers["TomTom-Api-Key"] = state.settings.apiKey; headers.Attributes = attributes; } return headers; }
+function tomtomHeaders(attributes) {
+  const headers = { "TomTom-Api-Version": "2", "TomTom-Api-Key": state.settings.apiKey };
+  if (attributes) headers.Attributes = attributes;
+  return headers;
+}
 function nearestPlace(current, places) { return places.reduce((nearest, place) => distanceKm(current, place) < distanceKm(current, nearest) ? place : nearest); }
 
 function drawPlaceMarkers() {
