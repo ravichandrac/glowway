@@ -138,10 +138,16 @@ function getCurrentLocation() {
     }
     navigator.geolocation.getCurrentPosition(
       (position) => resolve({ lat: position.coords.latitude, lon: position.coords.longitude, label: "Your location" }),
-      () => reject(new Error("Glowway needs location access. Tap Settings in Safari and allow Location while using the app.")),
-      { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 },
+      (error) => reject(locationError(error)),
+      { enableHighAccuracy: false, timeout: 30000, maximumAge: 180000 },
     );
   });
+}
+
+function locationError(error) {
+  if (error.code === 1) return new Error("Location was denied. In Safari, open the page menu beside the address bar, choose Website Settings, then set Location to Allow.");
+  if (error.code === 2) return new Error("Your iPhone could not find its location. Check that Location Services and Precise Location are on, then try again outside or near a window.");
+  return new Error("Your iPhone is taking longer than expected to find its location. Please wait a moment, then tap Refresh live traffic.");
 }
 
 function chooseJourney(current, places) {
