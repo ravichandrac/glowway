@@ -30,6 +30,11 @@
         <p id="loading-message">Getting your live location…</p>
       </section>
 
+      <section id="destination-panel" class="destination-panel hidden" aria-live="polite">
+        <p id="origin-label" class="destination-question">Where are you going?</p>
+        <div id="destination-buttons" class="destination-buttons"></div>
+      </section>
+
       <section id="trip-card" class="trip-card hidden" aria-live="polite">
         <div class="trip-card__topline">
           <span id="live-pill" class="live-pill">Live</span>
@@ -58,18 +63,14 @@
         <div class="settings-header">
           <div>
             <p class="brand">glowway</p>
-            <h1>Set up your journeys</h1>
+            <h1>TomTom connection</h1>
           </div>
           <button type="button" id="close-settings" class="icon-button" aria-label="Close settings">×</button>
         </div>
-        <p class="settings-intro">Your TomTom key and locations stay in this browser on your phone.</p>
+        <p class="settings-intro">Your TomTom key stays only in this browser on your iPhone. Your three destinations are already set.</p>
         <label>TomTom API key<input id="api-key" name="apiKey" type="password" autocomplete="off" placeholder="Paste your free TomTom key" required /></label>
-        <label>Home in Droitwich<input id="home-location" name="homeLocation" autocomplete="street-address" placeholder="Your Droitwich postcode" required /></label>
-        <label>Destination 1 — Banwood Road<input id="destination-one" name="destinationOne" autocomplete="street-address" placeholder="Exact address or postcode" required /></label>
-        <label>Destination 2 — Kenyon Street<input id="destination-two" name="destinationTwo" autocomplete="street-address" placeholder="Exact address or postcode" required /></label>
-        <label>Default destination<select id="default-destination" name="defaultDestination"><option value="one">Banwood Road</option><option value="two">Kenyon Street</option></select></label>
-        <p class="settings-note">When you are nearer Droitwich, Glowway sends you to your chosen destination. When you are nearer either destination, it sends you home.</p>
-        <button class="save-button" type="submit">Save and show live traffic</button>
+        <p class="settings-note">Fixed places: Droitwich (WR9 7DH), Brandwood Road (B14 6BH), and Kenyon Street (B18 6AR).</p>
+        <button class="save-button" type="submit">Save key</button>
       </form>
     </dialog>
 

@@ -1,6 +1,6 @@
 # Glowway
 
-Glowway is your personal, installable live traffic app. It uses your current iPhone location to decide whether you are travelling from Droitwich to your chosen destination or back home. It then gets a live, traffic-aware route from TomTom and colours each affected road section:
+Glowway is your personal, installable live traffic app. It uses your current iPhone location to identify the nearest of your three fixed places, then lets you choose one of the other two destinations. The fixed places are Droitwich (`WR9 7DH`), Brandwood Road (`B14 6BH`), and Kenyon Street (`B18 6AR`). It then gets a live, traffic-aware route from TomTom and colours each affected road section:
 
 - Green moves quickly: traffic is flowing.
 - Amber moves more slowly: traffic is building.
@@ -11,7 +11,6 @@ Glowway is your personal, installable live traffic app. It uses your current iPh
 1. An iPhone with Safari.
 2. A free TomTom developer account and API key.
 3. A free GitHub account to host the app securely (HTTPS is required for iPhone location access).
-4. The exact postcodes for your Droitwich home, Banwood Road destination, and Kenyon Street destination.
 
 ## Create your free TomTom key
 
@@ -40,13 +39,13 @@ TomTom's free allocation is ample for personal use. Their current pricing page l
 2. Tap the **Share** button (the square with the upward arrow).
 3. Scroll down and tap **Add to Home Screen**.
 4. Tap **Add**. You now have a Glowway icon on your Home Screen.
-5. Open Glowway, then enter your TomTom key and the three exact locations. Press **Save and show live traffic**.
+5. Open Glowway, paste your TomTom key once, then press **Save key**.
 6. When Safari asks for location permission, choose **Allow While Using App**.
 
 ## Everyday use
 
-Open Glowway whenever you want a live check. It automatically selects the outward journey when you are closest to Droitwich, and the return journey when you are closest to either destination. Tap **Refresh live traffic** whenever you want the latest route calculation.
+Open Glowway whenever you want a live check. It immediately displays the two places other than the one you are nearest, so you can select your destination with one tap. Tap **Refresh live traffic** whenever you want the latest route calculation.
 
 ## Important privacy note
 
-This app does not have a server or database. Your API key and addresses are kept in the browser storage of the phone where you configure it. GitHub Pages hosts only the app files. Avoid sharing the GitHub Pages link, because anyone who has it can load the app (but they cannot see the key stored in your phone).
+This app does not have a server or database. Your API key is kept in the browser storage of the phone where you configure it. GitHub Pages hosts only the app files. Avoid sharing the GitHub Pages link, because anyone who has it can load the app (but they cannot see the key stored in your phone).

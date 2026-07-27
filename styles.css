@@ -13,11 +13,16 @@ button { cursor: pointer; }
 .brand { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.07em; }
 .journey-label { margin: 4px 0 0; color: #c4d1e9; font-size: 12px; }
 .icon-button { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,.19); border-radius: 50%; background: rgba(9, 23, 45, .72); color: #f4f8ff; font-size: 19px; backdrop-filter: blur(14px); }
-.loading-card, .trip-card { position: absolute; z-index: 500; right: 12px; bottom: max(14px, env(safe-area-inset-bottom)); left: 12px; border: 1px solid rgba(255,255,255,.21); border-radius: 26px; background: rgba(7, 19, 42, .78); box-shadow: 0 16px 45px rgba(0,0,0,.31); backdrop-filter: blur(20px); }
+.loading-card, .trip-card, .destination-panel { position: absolute; z-index: 500; right: 12px; bottom: max(14px, env(safe-area-inset-bottom)); left: 12px; border: 1px solid rgba(255,255,255,.21); border-radius: 26px; background: rgba(7, 19, 42, .78); box-shadow: 0 16px 45px rgba(0,0,0,.31); backdrop-filter: blur(20px); }
 .loading-card { display: grid; justify-items: center; gap: 12px; padding: 26px; color: #d5e2fa; text-align: center; }
 .loading-card p { margin: 0; font-size: 14px; }
 .loader { width: 26px; height: 26px; border: 3px solid rgba(255,255,255,.22); border-top-color: #76f0cf; border-radius: 50%; animation: spin .8s linear infinite; }
 .trip-card { padding: 18px; }
+.destination-panel { padding: 17px; }
+.destination-question { margin: 0 0 12px; color: #dce7f8; font-size: 14px; font-weight: 600; }
+.destination-buttons { display: grid; gap: 10px; }
+.destination-button { display: flex; align-items: center; justify-content: space-between; width: 100%; border: 1px solid rgba(124, 240, 210, .36); border-radius: 17px; background: rgba(59, 130, 148, .28); color: #f4f8ff; padding: 15px; text-align: left; }
+.destination-button span { font-size: 17px; font-weight: 700; letter-spacing: -.03em; }.destination-button small { color: #a8edda; font-size: 12px; }
 .hidden { display: none; }
 .trip-card__topline, .traffic-summary, .legend { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .trip-card__topline { color: #c7d6ef; font-size: 11px; }
